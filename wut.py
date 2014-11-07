@@ -1,3 +1,4 @@
+import os
 import random
 from helga.plugins import match
 from helga import log, settings
@@ -64,7 +65,10 @@ class Markov(object):
 
 
 # init the plugin with some data
-with open('text') as t:
+here = os.path.abspath(os.path.dirname(__file__))
+text_path = os.path.join(here, 'text')
+
+with open(text_path) as t:
     m = Markov(t)
 
 
@@ -74,7 +78,8 @@ def is_getting_asked(message, botnick=None):
     message = message.strip()
     if message.startswith(botnick) and message.endswith('?'):
         return 'asking'
-    return 'telling'
+    elif message.startswith(botnick) and 'say something about' in message:
+        return 'telling'
 
 
 @match(is_getting_asked, priority=1)
@@ -84,7 +89,7 @@ def wut(client, channel, nick, message, matches):
     """
     if matches == 'asking':
         return m.generate_markov_text(15)
-    else:
+    elif matches == 'telling':
         about = message.strip().split()[-1]
         phrases = [m.generate_markov_text(10) for p in range(200)]
         for p in phrases:
