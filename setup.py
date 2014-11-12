@@ -21,7 +21,7 @@ setup(name="helga-wut",
       packages=find_packages(),
       entry_points = dict(
           helga_plugins = [
-              'wut',
+              'wut = wut:wut',
           ],
       ),
 )
