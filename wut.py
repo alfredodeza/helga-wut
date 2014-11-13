@@ -90,9 +90,10 @@ def wut(client, channel, nick, message, matches):
     if matches == 'asking':
         return m.generate_markov_text(15)
     elif matches == 'telling':
-        about = message.strip().split()[-1]
+        about = message.strip().split()[-1].decode('utf-8')
         phrases = [m.generate_markov_text(10) for p in range(200)]
         for p in phrases:
+            p = p.decode('utf-8')
             if about.lower() in p.lower():
                 return '%s: %s' % (nick, p)
         return '%s: %s' % (nick, phrases[0])
