@@ -80,6 +80,9 @@ def is_getting_asked(message, botnick=None):
         return 'asking'
     elif message.startswith(botnick) and 'say something about' in message:
         return 'telling'
+    elif message.startswith(botnick) and len(message.split()) > 1:
+        # maybe try and answer every now and then
+        return random.choice([True, True, True, False, False])
 
 
 def remove_articles(split_phrase):
