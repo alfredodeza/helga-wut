@@ -117,7 +117,7 @@ def wut(client, channel, nick, message, matches):
     """
     Match a user asking something to the bot
     """
-    keywords = remove_articles(message.strip().split().decode('utf-8'))
+    keywords = remove_articles(message.strip().decode('utf-8').split())
     about = keywords.pop(-1)
     phrases = [m.generate_markov_text(18) for p in range(200)]
     for p in phrases:
