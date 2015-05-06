@@ -58,7 +58,7 @@ class Markov(object):
 
     def remove_articles(self, sentence):
         articles = ['an', 'the', 'a', 'is', 'your', 'but', 'they', "they'd"]
-        last_word = sentence.strip().split(' ')[-1]
+        last_word = sentence.strip().split(' ')[-1].lower()
         if last_word in articles:
             return sentence.split(last_word)[0]
         return sentence
@@ -123,8 +123,8 @@ def wut(client, channel, nick, message, matches):
     for p in phrases:
         p = p.decode('utf-8')
         for w in keywords:
-            if w.lower() in p.lower():
+            if w.lower() in p.lower().split():
                 return '%s: %s' % (nick, p)
-        if about.lower() in p.lower():
+        if about.lower() in p.lower().split():
             return '%s: %s' % (nick, p)
     return '%s: %s' % (nick, phrases[0])
