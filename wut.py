@@ -82,18 +82,49 @@ def is_getting_asked(message, botnick=None):
         return 'telling'
 
 
+def remove_articles(split_phrase):
+    garbage = [
+        'a',
+        'an',
+        'the',
+        'this',
+        'that',
+        'other',
+        'which',
+        'what',
+        'where',
+        'some',
+        'any',
+        'here',
+        'there',
+        'how',
+        'for',
+        'i',
+        'you',
+        'them',
+        'with',
+        'without',
+    ]
+    clean = []
+    for i in split_phrase:
+        if i.lower() not in garbage:
+            clean.append(i)
+    return clean
+
+
 @match(is_getting_asked, priority=1)
 def wut(client, channel, nick, message, matches):
     """
     Match a user asking something to the bot
     """
-    if matches == 'asking':
-        return m.generate_markov_text(15)
-    elif matches == 'telling':
-        about = message.strip().split()[-1].decode('utf-8')
-        phrases = [m.generate_markov_text(10) for p in range(200)]
-        for p in phrases:
-            p = p.decode('utf-8')
-            if about.lower() in p.lower():
+    keywords = remove_articles(message.strip().split().decode('utf-8'))
+    about = keywords.pop(-1)
+    phrases = [m.generate_markov_text(10) for p in range(200)]
+    for p in phrases:
+        p = p.decode('utf-8')
+        for w in keywords:
+            if w.lower() in p.lower():
                 return '%s: %s' % (nick, p)
-        return '%s: %s' % (nick, phrases[0])
+        if about.lower() in p.lower():
+            return '%s: %s' % (nick, p)
+    return '%s: %s' % (nick, phrases[0])
