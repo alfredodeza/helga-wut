@@ -119,7 +119,7 @@ def wut(client, channel, nick, message, matches):
     """
     keywords = remove_articles(message.strip().split().decode('utf-8'))
     about = keywords.pop(-1)
-    phrases = [m.generate_markov_text(10) for p in range(200)]
+    phrases = [m.generate_markov_text(18) for p in range(200)]
     for p in phrases:
         p = p.decode('utf-8')
         for w in keywords:
