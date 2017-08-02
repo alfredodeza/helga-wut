@@ -68,12 +68,17 @@ class Markov(object):
 here = os.path.abspath(os.path.dirname(__file__))
 text_path = os.path.join(here, 'text')
 
-with open(text_path) as t:
-    m = Markov(t)
+try:
+    with open(text_path) as t:
+        m = Markov(t)
+except IOError:
+    logger.error('could not load text at %s. disabling' % text_path)
+    m = None
 
 
 def is_getting_asked(message, botnick=None):
-
+    if not m:
+        return False
     botnick = botnick or settings.NICK
     message = message.strip()
     if message.startswith(botnick) and message.endswith('?'):
